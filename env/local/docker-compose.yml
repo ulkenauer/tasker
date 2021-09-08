@@ -1,0 +1,26 @@
+version: "2"
+services:
+  tasker_backend:
+    image: tasker_backend
+    build: ./backend
+    tty: true
+    volumes:
+      - ../../src:/src
+  tasker_minio:
+    image: minio/minio
+    volumes:
+      - ./minio/data:/data
+    ports:
+      - 9001:9000
+    environment:
+      MINIO_BROWSER: 'off'
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: minio123
+    command: server /data
+networks:
+  internal:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.220.0/28
